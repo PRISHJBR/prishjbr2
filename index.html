@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Essay Generator - Free Academic Writing Tool</title>
+  <meta name="description" content="Generate well-structured academic essays instantly with our free essay generator tool. Perfect for students, researchers, and writers.">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background-color: #f9fafb;
+      color: #1f2937;
+      line-height: 1.6;
+    }
+
+    .header {
+      background: white;
+      border-bottom: 1px solid #e5e7eb;
+      padding: 1rem 0;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo {
+      width: 32px;
+      height: 32px;
+      color: #2563eb;
+    }
+
+    .title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #1f2937;
+      margin: 0;
+    }
+
+    .subtitle {
+      font-size: 0.875rem;
+      color: #6b7280;
+      margin: 0;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+
+    @media (max-width: 768px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+
+    .card-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .card-content {
+      padding: 1.5rem;
+    }
+
+    .info-card {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      margin-bottom: 1.5rem;
+    }
+
+    .info-title {
+      font-size: 1.125rem;
+      font-weight: 500;
+      color: #1e40af;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .info-list {
+      list-style: decimal;
+      margin-left: 1.25rem;
+      color: #1e40af;
+    }
+
+    .info-list li {
+      margin: 0.25rem 0;
+      font-size: 0.875rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .label {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #374151;
+      margin-bottom: 0.5rem;
+    }
+
+    .textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      font-size: 0.875rem;
+      resize: vertical;
+      font-family: inherit;
+    }
+
+    .textarea:focus {
+      outline: none;
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    .char-count {
+      text-align: right;
+      font-size: 0.75rem;
+      color: #9ca3af;
+      margin-top: 0.5rem;
+    }
+
+    .button {
+      width: 100%;
+      padding: 0.75rem 1.5rem;
+      background: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .button:hover {
+      background: #1d4ed8;
+    }
+
+    .button:disabled {
+      background: #9ca3af;
+      cursor: not-allowed;
+    }
+
+    .button-secondary {
+      background: #f3f4f6;
+      color: #374151;
+      border: 1px solid #d1d5db;
+    }
+
+    .button-secondary:hover {
+      background: #e5e7eb;
+    }
+
+    .loading {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 1rem;
+    }
+
+    .spinner {
+      width: 20px;
+      height: 20px;
+      border: 2px solid #e5e7eb;
+      border-top: 2px solid #2563eb;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .essay-output {
+      min-height: 400px;
+      background: white;
+    }
+
+    .essay-content {
+      max-height: 600px;
+      overflow-y: auto;
+      padding: 1.5rem;
+    }
+
+    .essay-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: #1f2937;
+    }
+
+    .essay-text {
+      white-space: pre-wrap;
+      line-height: 1.7;
+      color: #374151;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .stat-item {
+      text-align: center;
+      padding: 1rem;
+      background: #f9fafb;
+      border-radius: 6px;
+    }
+
+    .stat-number {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #2563eb;
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: #6b7280;
+    }
+
+    .empty-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+    }
+
+    .error {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      color: #b91c1c;
+      padding: 1rem;
+      border-radius: 6px;
+      margin-top: 1rem;
+    }
+
+    .success {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      color: #166534;
+      padding: 1rem;
+      border-radius: 6px;
+      margin-top: 1rem;
+    }
+
+    .footer {
+      background: white;
+      border-top: 1px solid #e5e7eb;
+      margin-top: 4rem;
+      padding: 2rem 0;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+
+    @media (max-width: 768px) {
+      .footer-content {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .footer-title {
+      font-weight: 500;
+      color: #1f2937;
+      margin-bottom: 0.75rem;
+    }
+
+    .footer-text {
+      font-size: 0.875rem;
+      color: #6b7280;
+    }
+
+    .footer-list {
+      list-style: none;
+    }
+
+    .footer-list li {
+      margin: 0.25rem 0;
+      font-size: 0.875rem;
+      color: #6b7280;
+    }
+
+    .footer-bottom {
+      text-align: center;
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 1px solid #e5e7eb;
+      font-size: 0.875rem;
+      color: #6b7280;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <svg class="logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 14l9-5-9-5-9 5 9 5z"/>
+        <path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/>
+        <path d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/>
+      </svg>
+      <div>
+        <h1 class="title">Essay Generator</h1>
+        <p class="subtitle">Free Academic Writing Tool</p>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="grid">
+      <!-- Input Panel -->
+      <div>
+        <div class="card info-card">
+          <div class="card-content">
+            <h3 class="info-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="m9 12 2 2 4-4"/>
+              </svg>
+              How to Use
+            </h3>
+            <ol class="info-list">
+              <li>Enter your essay topic in the field below</li>
+              <li>Add your sources and reference materials</li>
+              <li>Click "Generate Essay" to create your content</li>
+              <li>Review, edit, and copy your generated essay</li>
+            </ol>
+          </div>
+        </div>
+
+        <form id="essayForm">
+          <div class="card">
+            <div class="card-content">
+              <label class="label" for="topic">Essay Topic</label>
+              <textarea 
+                id="topic" 
+                class="textarea" 
+                rows="3" 
+                placeholder="Enter your essay topic here... (e.g., 'The impact of artificial intelligence on modern education')"
+                maxlength="500"
+                required
+              ></textarea>
+              <div class="char-count">
+                <span id="topicCount">0</span>/500
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-content">
+              <label class="label" for="sources">Sources & References</label>
+              <textarea 
+                id="sources" 
+                class="textarea" 
+                rows="8" 
+                placeholder="Paste your sources here... Include URLs, book titles, articles, or any reference materials you want to include in your essay."
+                maxlength="2000"
+                required
+              ></textarea>
+              <div class="char-count">
+                <span id="sourcesCount">0</span>/2000
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-content">
+              <button type="submit" class="button" id="generateBtn">
+                Generate Essay
+              </button>
+              <div class="loading" id="loadingState">
+                <div class="spinner"></div>
+                <span>Generating your essay...</span>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- Output Panel -->
+      <div>
+        <div class="card essay-output">
+          <div class="card-header">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <h3 style="margin: 0;">Generated Essay</h3>
+              <div style="display: flex; gap: 1rem; align-items: center;">
+                <span id="wordCount" style="font-size: 0.875rem; color: #6b7280;">0 words</span>
+                <button type="button" class="button button-secondary" id="copyBtn" style="width: auto; padding: 0.5rem 1rem;" disabled>
+                  Copy
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="card-content">
+            <div id="essayOutput" class="empty-state">
+              <div class="empty-icon">📄</div>
+              <h4 style="margin-bottom: 0.5rem;">Ready to Generate</h4>
+              <p style="margin-bottom: 1.5rem; max-width: 400px; margin-left: auto; margin-right: auto;">
+                Enter your topic and sources, then click "Generate Essay" to create your academic content.
+              </p>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; max-width: 300px; margin: 0 auto;">
+                <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.75rem;">
+                  <span style="color: #10b981;">✓</span>
+                  Free Forever
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.75rem;">
+                  <span style="color: #10b981;">✓</span>
+                  Well-Structured
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.75rem;">
+                  <span style="color: #10b981;">✓</span>
+                  Academic Style
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.75rem;">
+                  <span style="color: #10b981;">✓</span>
+                  Source-Based
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-content">
+            <h4 style="margin-bottom: 1rem; color: #374151;">Essay Statistics</h4>
+            <div class="stats-grid">
+              <div class="stat-item">
+                <div class="stat-number" id="statWords">0</div>
+                <div class="stat-label">Words</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-number" id="statParagraphs">0</div>
+                <div class="stat-label">Paragraphs</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-number" id="statReadTime">0</div>
+                <div class="stat-label">Min Read</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-number" id="statSources">0</div>
+                <div class="stat-label">Sources</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-content">
+      <div>
+        <h5 class="footer-title">Essay Generator</h5>
+        <p class="footer-text">
+          Free tool for creating well-structured academic essays based on your topics and sources.
+        </p>
+      </div>
+      <div>
+        <h5 class="footer-title">Features</h5>
+        <ul class="footer-list">
+          <li>• Free forever</li>
+          <li>• Source integration</li>
+          <li>• Academic formatting</li>
+          <li>• Word count tracking</li>
+        </ul>
+      </div>
+      <div>
+        <h5 class="footer-title">Info</h5>
+        <ul class="footer-list">
+          <li>• No API keys needed</li>
+          <li>• Works offline</li>
+          <li>• Mobile friendly</li>
+          <li>• Instant results</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2024 Essay Generator. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Essay generation logic
+    function generateEssay(topic, sources) {
+      const title = generateTitle(topic);
+      const introduction = generateIntroduction(topic, sources);
+      const bodyParagraphs = generateBodyParagraphs(topic, sources);
+      const conclusion = generateConclusion(topic);
+      
+      const content = `${introduction}\n\n${bodyParagraphs}\n\n${conclusion}`;
+      
+      const wordCount = content.split(/\s+/).length;
+      const paragraphs = content.split('\n\n').length;
+      const readingTime = Math.ceil(wordCount / 200);
+      const sourcesCount = countSources(sources);
+      
+      return {
+        title,
+        content,
+        wordCount,
+        paragraphs,
+        readingTime,
+        sourcesCount
+      };
+    }
+
+    function generateTitle(topic) {
+      const words = topic.split(' ');
+      if (words.length <= 8) {
+        return topic;
+      }
+      return words.slice(0, 8).join(' ') + '...';
+    }
+
+    function generateIntroduction(topic, sources) {
+      const sourcesPreview = sources.length > 100 ? sources.substring(0, 100) + '...' : sources;
+      
+      return `Introduction
+
+The topic of "${topic}" represents a significant area of study that warrants comprehensive examination. This essay will explore the various dimensions of this subject, drawing from multiple sources and perspectives to provide a thorough analysis.
+
+Based on the available sources, including ${sourcesPreview}, this discussion will examine the key concepts, implications, and broader significance of ${topic}. The following analysis aims to present a balanced and well-researched perspective on this important topic.`;
+    }
+
+    function generateBodyParagraphs(topic, sources) {
+      const topicWords = topic.split(' ');
+      
+      let bodyContent = '';
+      
+      bodyContent += `Historical Context and Background
+
+Understanding ${topic} requires examining its historical development and contextual background. The evolution of this subject has been influenced by numerous factors, including technological advances, social changes, and academic research. Historical analysis reveals that ${topicWords[0]} has undergone significant transformations over time, adapting to changing circumstances and new discoveries.
+
+The foundational concepts underlying ${topic} have been shaped by contributions from various fields of study. Researchers and practitioners have continuously expanded our understanding through empirical studies, theoretical frameworks, and practical applications.`;
+
+      bodyContent += `\n\nCurrent Perspectives and Analysis
+
+Contemporary analysis of ${topic} reveals multiple perspectives and approaches. Current research suggests that ${topicWords.slice(0, 2).join(' ')} plays a crucial role in understanding broader implications and applications. The available sources indicate that modern approaches to this subject emphasize both theoretical understanding and practical implementation.
+
+Key findings from recent studies highlight the importance of ${topicWords[topicWords.length - 1]} in the overall framework. This multifaceted approach allows for comprehensive analysis while acknowledging the complexity inherent in ${topic}.`;
+
+      bodyContent += `\n\nImplications and Applications
+
+The practical implications of ${topic} extend across multiple domains and disciplines. Analysis of the available sources suggests that understanding this subject has significant applications in real-world contexts. The interdisciplinary nature of ${topic} makes it relevant to various fields of study and professional practice.
+
+Furthermore, the ongoing developments in this area continue to shape how we approach related challenges and opportunities. The evidence suggests that ${topicWords[0]} will remain an important area of focus for future research and development.`;
+
+      return bodyContent;
+    }
+
+    function generateConclusion(topic) {
+      return `Conclusion
+
+In conclusion, the examination of ${topic} reveals a complex and multifaceted subject that requires careful analysis and consideration. Through this comprehensive review, we have explored the various dimensions of this topic, from its historical development to its contemporary applications.
+
+The evidence presented demonstrates the significance of ${topic} in the broader context of academic study and practical application. Future research in this area should continue to build upon the foundations established by current scholarship while exploring new directions and possibilities.
+
+This analysis contributes to our understanding of ${topic} and provides a foundation for continued inquiry and development in this important field of study.`;
+    }
+
+    function countSources(sources) {
+      const urlCount = (sources.match(/https?:\/\/[^\s]+/g) || []).length;
+      const citationCount = (sources.match(/\([^)]+\)/g) || []).length;
+      const lineCount = sources.split('\n').filter(line => line.trim().length > 20).length;
+      
+      return Math.max(urlCount, citationCount, Math.min(lineCount, 10));
+    }
+
+    // DOM manipulation
+    const topicInput = document.getElementById('topic');
+    const sourcesInput = document.getElementById('sources');
+    const topicCount = document.getElementById('topicCount');
+    const sourcesCount = document.getElementById('sourcesCount');
+    const form = document.getElementById('essayForm');
+    const generateBtn = document.getElementById('generateBtn');
+    const loadingState = document.getElementById('loadingState');
+    const essayOutput = document.getElementById('essayOutput');
+    const copyBtn = document.getElementById('copyBtn');
+    const wordCount = document.getElementById('wordCount');
+    const statWords = document.getElementById('statWords');
+    const statParagraphs = document.getElementById('statParagraphs');
+    const statReadTime = document.getElementById('statReadTime');
+    const statSources = document.getElementById('statSources');
+
+    let currentEssay = null;
+
+    // Character counters
+    topicInput.addEventListener('input', () => {
+      topicCount.textContent = topicInput.value.length;
+    });
+
+    sourcesInput.addEventListener('input', () => {
+      sourcesCount.textContent = sourcesInput.value.length;
+    });
+
+    // Form submission
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const topic = topicInput.value.trim();
+      const sources = sourcesInput.value.trim();
+      
+      if (!topic || !sources) {
+        showMessage('Please fill in both topic and sources fields.', 'error');
+        return;
+      }
+      
+      if (topic.length < 10) {
+        showMessage('Topic must be at least 10 characters long.', 'error');
+        return;
+      }
+      
+      if (sources.length < 20) {
+        showMessage('Sources must be at least 20 characters long.', 'error');
+        return;
+      }
+      
+      // Show loading state
+      generateBtn.disabled = true;
+      loadingState.style.display = 'flex';
+      
+      try {
+        // Simulate processing time
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        
+        // Generate essay
+        currentEssay = generateEssay(topic, sources);
+        
+        // Display essay
+        displayEssay(currentEssay);
+        
+        // Show success message
+        showMessage(`Generated a ${currentEssay.wordCount}-word essay with ${currentEssay.paragraphs} paragraphs.`, 'success');
+        
+      } catch (error) {
+        showMessage('Failed to generate essay. Please try again.', 'error');
+      } finally {
+        generateBtn.disabled = false;
+        loadingState.style.display = 'none';
+      }
+    });
+
+    // Copy to clipboard
+    copyBtn.addEventListener('click', async () => {
+      if (!currentEssay) return;
+      
+      try {
+        await navigator.clipboard.writeText(currentEssay.content);
+        copyBtn.textContent = 'Copied!';
+        setTimeout(() => {
+          copyBtn.textContent = 'Copy';
+        }, 2000);
+        showMessage('Essay content has been copied to your clipboard.', 'success');
+      } catch (error) {
+        showMessage('Failed to copy essay to clipboard.', 'error');
+      }
+    });
+
+    function displayEssay(essay) {
+      essayOutput.innerHTML = `
+        <div class="essay-content">
+          <h2 class="essay-title">${essay.title}</h2>
+          <div class="essay-text">${essay.content}</div>
+        </div>
+      `;
+      
+      // Update word count
+      wordCount.textContent = `${essay.wordCount} words`;
+      
+      // Update statistics
+      statWords.textContent = essay.wordCount;
+      statParagraphs.textContent = essay.paragraphs;
+      statReadTime.textContent = essay.readingTime;
+      statSources.textContent = essay.sourcesCount;
+      
+      // Enable copy button
+      copyBtn.disabled = false;
+    }
+
+    function showMessage(message, type) {
+      // Remove existing messages
+      const existingMessages = document.querySelectorAll('.success, .error');
+      existingMessages.forEach(msg => msg.remove());
+      
+      // Create new message
+      const messageEl = document.createElement('div');
+      messageEl.className = type;
+      messageEl.textContent = message;
+      
+      // Add to form
+      form.appendChild(messageEl);
+      
+      // Auto-remove after 5 seconds
+      setTimeout(() => {
+        messageEl.remove();
+      }, 5000);
+    }
+  </script>
+</body>
+</html>
